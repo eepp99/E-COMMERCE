@@ -38,7 +38,7 @@ export default function Navbar() {
                 className="p-2 hover:opacity-50 transition-opacity z-50 text-black flex items-center justify-center relative cursor-pointer"
                 aria-label="Menu"
               >
-                {isOpen ? <X className="w-5 h-5 md:w-6 md:h-6" /> : <Menu className="w-5 h-5 md:w-6 md:h-6" />}
+                {isOpen ? <X className="w-6 h-6 md:w-7 md:h-7" /> : <Menu className="w-6 h-6 md:w-7 md:h-7" />}
                 {cartItemsCount > 0 && !isOpen && (
                   <span className="absolute top-1 right-1 md:top-0 md:right-0 flex h-4 w-4 md:h-5 md:w-5 items-center justify-center rounded-full bg-black text-[9px] md:text-[10px] font-bold text-white tracking-normal font-sans not-italic border border-white">
                     {cartItemsCount}

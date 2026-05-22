@@ -179,6 +179,17 @@ async function startServer() {
     }
   });
 
+  app.delete("/api/admin/products/:id", authenticateAdmin, (req, res) => {
+    const { id } = req.params;
+    const index = products.findIndex(p => p.id === id);
+    if (index !== -1) {
+      products.splice(index, 1);
+      res.json({ success: true });
+    } else {
+      res.status(404).json({ error: "Product not found" });
+    }
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

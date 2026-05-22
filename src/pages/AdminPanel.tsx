@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Order, Product } from '../types';
-import { Package, ListOrdered, Edit2, Check, X, Upload, Lock, Menu as MenuIcon } from 'lucide-react';
+import { Package, ListOrdered, Edit2, Check, X, Upload, Lock, Menu as MenuIcon, Trash2 } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function AdminPanel() {
@@ -134,6 +134,29 @@ export default function AdminPanel() {
           setProducts(products.map(p => p.id === id ? updated : p));
         }
         setEditingId(null);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    
+    const token = localStorage.getItem('admin_token');
+    if (!token) return;
+
+    try {
+      const res = await fetch(`/api/admin/products/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.status === 401) {
+        handleLogout();
+        return;
+      }
+      if (res.ok) {
+        setProducts(products.filter(p => p.id !== id));
       }
     } catch (err) {
       console.error(err);
@@ -448,10 +471,16 @@ export default function AdminPanel() {
                             </button>
                           </div>
                         ) : (
-                          <button onClick={() => handleEdit(product)} className="text-black hover:opacity-50 transition-colors flex items-center justify-center space-x-2 border border-black p-2 sm:border-0 sm:p-0 w-full sm:w-auto mt-2 sm:mt-0" title="Edit">
-                            <Edit2 className="w-4 h-4" />
-                            <span className="text-[10px] font-bold uppercase tracking-widest font-sans sm:hidden xl:inline">Edit Product</span>
-                          </button>
+                          <div className="flex items-center space-x-2 w-full sm:w-auto mt-2 sm:mt-0">
+                            <button onClick={() => handleEdit(product)} className="text-black hover:opacity-50 transition-colors flex-1 sm:flex-initial flex items-center justify-center space-x-2 border border-black p-2 sm:border-0 sm:p-0 w-full sm:w-auto" title="Edit">
+                              <Edit2 className="w-4 h-4" />
+                              <span className="text-[10px] font-bold uppercase tracking-widest font-sans sm:hidden xl:inline">Edit</span>
+                            </button>
+                            <button onClick={() => handleDelete(product.id)} className="text-red-600 hover:text-red-800 transition-colors flex-1 sm:flex-initial flex items-center justify-center space-x-2 border border-red-600 p-2 sm:border-0 sm:p-0 w-full sm:w-auto" title="Delete">
+                              <Trash2 className="w-4 h-4" />
+                              <span className="text-[10px] font-bold uppercase tracking-widest font-sans sm:hidden xl:inline">Delete</span>
+                            </button>
+                          </div>
                         )}
                       </td>
                     </tr>
