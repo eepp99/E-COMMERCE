@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Order, Product } from '../types';
-import { Package, ListOrdered, Edit2, Check, X, Upload, Lock } from 'lucide-react';
+import { Package, ListOrdered, Edit2, Check, X, Upload, Lock, Menu as MenuIcon } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function AdminPanel() {
@@ -16,6 +16,9 @@ export default function AdminPanel() {
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
+  
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   // Check auth state on mount
   useEffect(() => {
@@ -24,6 +27,16 @@ export default function AdminPanel() {
       setIsAdminAuthenticated(true);
     }
     setAuthChecked(true);
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const fetchData = async () => {
@@ -180,11 +193,67 @@ export default function AdminPanel() {
 
   return (
     <div className="bg-white flex-1 flex flex-col border-t border-black">
-      <div className="border-b border-black p-6 md:p-12 flex flex-col md:flex-row md:items-center justify-between">
-        <h1 className="text-4xl lg:text-5xl font-serif italic tracking-tighter text-black">
-          Dashboard <span className="text-[10px] font-sans not-italic uppercase font-bold tracking-[0.2em] ml-4">v.2.04</span>
+      <div className="border-b border-black p-6 md:p-12 flex flex-row items-center justify-between">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif italic tracking-tighter text-black">
+          Dashboard <span className="text-[10px] font-sans not-italic uppercase font-bold tracking-[0.2em] ml-2 md:ml-4">v.2.04</span>
         </h1>
-        <div className="mt-6 md:mt-0 flex flex-wrap gap-2 md:gap-4 items-center">
+        
+        {/* Mobile Menu Toggle */}
+        <div className="md:hidden relative" ref={menuRef}>
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="p-2 border border-black hover:bg-black hover:text-white transition-colors"
+          >
+            {isMenuOpen ? <X className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
+          </button>
+          
+          {isMenuOpen && (
+            <div className="absolute top-full right-0 mt-2 bg-white border border-black flex flex-col w-48 shadow-lg z-50">
+              {activeTab === 'products' && (
+                <button
+                  onClick={() => {
+                    setEditingId('new');
+                    setEditForm({ name: '', price: 0, stock: 0, image: '', description: '' });
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] border-b border-black hover:bg-neutral-100 transition-colors"
+                >
+                  Add New Product
+                </button>
+              )}
+              <button
+                onClick={() => {
+                  setActiveTab('orders');
+                  setIsMenuOpen(false);
+                }}
+                className={`w-full text-left px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] border-b border-black transition-colors ${activeTab === 'orders' ? 'bg-black text-white' : 'hover:bg-neutral-100 text-black'}`}
+              >
+                Orders ({orders.length})
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('products');
+                  setIsMenuOpen(false);
+                }}
+                className={`w-full text-left px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] border-b border-black transition-colors ${activeTab === 'products' ? 'bg-black text-white' : 'hover:bg-neutral-100 text-black'}`}
+              >
+                Products ({products.length})
+              </button>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsMenuOpen(false);
+                }}
+                className="w-full text-left px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-neutral-100 transition-colors"
+              >
+                Sign Out
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Menu */}
+        <div className="hidden md:flex flex-wrap gap-2 md:gap-4 items-center">
           {activeTab === 'products' && (
             <button
               onClick={() => {
@@ -200,17 +269,17 @@ export default function AdminPanel() {
             onClick={() => setActiveTab('orders')}
             className={`flex items-center space-x-2 px-4 md:px-6 py-2 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors border border-black ${activeTab === 'orders' ? 'bg-black text-white' : 'bg-transparent text-black hover:bg-black hover:text-white'}`}
           >
-            <ListOrdered className="w-4 h-4 hidden sm:block" />
+            <ListOrdered className="w-4 h-4" />
             <span>Orders ({orders.length})</span>
           </button>
           <button
             onClick={() => setActiveTab('products')}
             className={`flex items-center space-x-2 px-4 md:px-6 py-2 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors border border-black ${activeTab === 'products' ? 'bg-black text-white' : 'bg-transparent text-black hover:bg-black hover:text-white'}`}
           >
-            <Package className="w-4 h-4 hidden sm:block" />
+            <Package className="w-4 h-4" />
             <span>Products ({products.length})</span>
           </button>
-          <div className="hidden sm:block w-px h-6 bg-black opacity-20 mx-2"></div>
+          <div className="w-px h-6 bg-black opacity-20 mx-2"></div>
           <button
             onClick={handleLogout}
             className="text-[10px] uppercase font-bold tracking-widest hover:text-black/50 transition-colors"

@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 
 export default function LandingPage() {
   return (
-    <div className="flex-1 flex flex-col relative bg-white overflow-hidden border-t border-black">
+    <div className="min-h-[calc(100vh-3rem)] md:min-h-[calc(100vh-3.5rem)] flex flex-col relative bg-white border-t border-black">
       <div className="absolute inset-0 z-0">
         <img 
           src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=2000" 

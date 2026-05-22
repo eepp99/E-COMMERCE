@@ -40,7 +40,7 @@ export default function Navbar() {
               >
                 {isOpen ? <X className="w-5 h-5 md:w-6 md:h-6" /> : <Menu className="w-5 h-5 md:w-6 md:h-6" />}
                 {cartItemsCount > 0 && !isOpen && (
-                  <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-black text-[10px] font-bold text-white tracking-normal font-sans not-italic border border-white">
+                  <span className="absolute top-1 right-1 md:top-0 md:right-0 flex h-4 w-4 md:h-5 md:w-5 items-center justify-center rounded-full bg-black text-[9px] md:text-[10px] font-bold text-white tracking-normal font-sans not-italic border border-white">
                     {cartItemsCount}
                   </span>
                 )}

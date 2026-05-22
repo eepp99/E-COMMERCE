@@ -19,14 +19,14 @@ export default function App() {
     <Router>
         <Routes>
           <Route path="/admin" element={
-            <div className="font-sans h-screen bg-white text-black flex flex-col overflow-hidden relative">
+            <div className="font-sans min-h-screen bg-white text-black flex flex-col relative">
               <AdminPanel />
             </div>
           } />
           <Route path="*" element={
-            <div className="font-sans h-screen bg-white text-black flex flex-col overflow-hidden relative">
+            <div className="font-sans min-h-screen bg-white text-black flex flex-col relative">
               <Navbar />
-              <main className="flex-1 overflow-auto flex flex-col">
+              <main className="flex-1 w-full flex flex-col">
                 <Routes>
                   <Route path="/" element={<LandingPage />} />
                   <Route path="/shop" element={<StoreFront />} />
@@ -35,17 +35,17 @@ export default function App() {
                   <Route path="/account" element={<Account />} />
                 </Routes>
               </main>
-              <footer className="border-t border-black px-4 py-2 flex flex-col sm:flex-row items-center justify-between shrink-0 bg-white text-[9px]">
+              <footer className="border-t border-black px-4 py-3 flex flex-col sm:flex-row items-center justify-between shrink-0 bg-white text-[9px] gap-3 sm:gap-0 mt-auto">
                 <div className="flex sm:w-1/3 justify-center sm:justify-start">
                 </div>
-                <div className="flex sm:w-1/3 items-center justify-center space-x-4 my-2 sm:my-0 text-black">
+                <div className="flex sm:w-1/3 items-center justify-center space-x-4 text-black">
                   <a href="mailto:studio-hello@gmail.com" className="hover:opacity-50 transition-opacity" title="Gmail"><Mail className="w-3.5 h-3.5 text-black" /></a>
                   <a href="#" className="hover:opacity-50 transition-opacity" title="Instagram"><Instagram className="w-3.5 h-3.5 text-black" /></a>
                   <a href="#" className="hover:opacity-50 transition-opacity" title="X (Twitter)"><Twitter className="w-3.5 h-3.5 text-black" /></a>
                   <a href="#" className="hover:opacity-50 transition-opacity" title="YouTube"><Youtube className="w-3.5 h-3.5 text-black" /></a>
                 </div>
                 <div className="flex sm:w-1/3 flex-col sm:flex-row items-center justify-center sm:justify-end gap-1 sm:gap-2">
-                  <span className="font-serif italic text-[11px] text-black">Contact Us</span>
+                  <span className="font-serif italic text-[10px] text-black">Contact Us</span>
                   <a href="mailto:studio-hello@gmail.com" className="font-bold uppercase tracking-[0.2em] hover:opacity-50 transition-opacity text-black">
                     studio-hello@gmail.com
                   </a>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Product } from '../types';
 import { useStore, formatPrice } from '../store';
-import { ArrowLeft, ShoppingCart } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, ChevronDown, ChevronUp } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function ProductDetails() {
@@ -10,6 +10,7 @@ export default function ProductDetails() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [shippingOpen, setShippingOpen] = useState(false);
   const addToCart = useStore((state) => state.addToCart);
   const currency = useStore((state) => state.currency);
   const storeProducts = useStore((state) => state.products);
@@ -66,7 +67,7 @@ export default function ProductDetails() {
         <img 
           src={product.image} 
           alt={product.name} 
-          className="w-full h-full max-h-[60vh] lg:max-h-[80vh] object-contain grayscale mix-blend-multiply hover:grayscale-0 transition-all duration-700 p-8" 
+          className="w-full h-full max-h-[70vh] lg:max-h-[90vh] object-contain grayscale mix-blend-multiply hover:grayscale-0 transition-all duration-700 p-4 md:p-8" 
         />
       </div>
 
@@ -124,8 +125,8 @@ export default function ProductDetails() {
 
                 <button 
                   onClick={() => {
-                    addToCart(product, quantity);
-                    setQuantity(1); // Reset after adding
+                     addToCart(product, quantity);
+                     setQuantity(1); // Reset after adding
                   }}
                   disabled={product.stock <= 0}
                   className="flex-1 w-full sm:w-auto flex items-center justify-center space-x-4 border border-black bg-black text-white px-8 py-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed group"
@@ -136,13 +137,34 @@ export default function ProductDetails() {
               </div>
             )}
             
-            <div className="mt-12 pt-12 border-t border-black/10">
-              <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Shipping & Returns</h3>
-              <ul className="text-sm font-sans space-y-2 text-black/70">
-                <li>Complementary shipping worldwide.</li>
-                <li>Returns accepted within 14 days of delivery.</li>
-                <li>Signature packaging included.</li>
-              </ul>
+            <div className="mt-12 mb-12 border-t border-black">
+              <button 
+                onClick={() => setShippingOpen(!shippingOpen)}
+                className="w-full flex items-center justify-between py-6 group"
+              >
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.2em]">Shipping & Returns</h3>
+                <span className="opacity-50 group-hover:opacity-100 transition-opacity flex items-center justify-center w-6 h-6 border border-black rounded-full text-black">
+                  {shippingOpen ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                </span>
+              </button>
+              {shippingOpen && (
+                <div className="pb-8">
+                  <ul className="text-sm font-sans space-y-3 text-black/70">
+                    <li className="flex items-center space-x-2">
+                       <span className="w-1 h-1 bg-black rounded-full" />
+                       <span>Complementary shipping worldwide.</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                       <span className="w-1 h-1 bg-black rounded-full" />
+                       <span>Returns accepted within 14 days of delivery.</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                       <span className="w-1 h-1 bg-black rounded-full" />
+                       <span>Signature packaging included with all orders.</span>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </div>
