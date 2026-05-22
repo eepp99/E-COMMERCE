@@ -1,0 +1,90 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile document",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Account creation timestamp"
+        }
+      },
+      "required": ["email", "createdAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "A customer's completed order",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of the user who made the order"
+        },
+        "email": {
+          "type": "string",
+          "description": "Customer email"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Total amount"
+        },
+        "currency": {
+          "type": "string",
+          "description": "Currency code"
+        },
+        "items": {
+          "type": "array",
+          "description": "Array of purchased items"
+        },
+        "status": {
+          "type": "string",
+          "description": "Order status (e.g. completed)"
+        },
+        "reference": {
+          "type": "string",
+          "description": "Payment reference from gateway"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Order creation timestamp"
+        }
+      },
+      "required": ["userId", "email", "amount", "currency", "reference", "status", "createdAt"]
+    },
+    "Subscriber": {
+      "title": "Subscriber",
+      "description": "A newsletter subscriber",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Subscriber email"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Subscription timestamp"
+        }
+      },
+      "required": ["email", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profile configurations"
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Purchased orders collection"
+    },
+    "/subscribers/{subscriberId}": {
+      "schema": { "$ref": "#/entities/Subscriber" },
+      "description": "Newsletter subscribers"
+    }
+  }
+}

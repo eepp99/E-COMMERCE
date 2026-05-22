@@ -1,0 +1,6 @@
+{
+  "name": "E-Commerce",
+  "description": "Minimalist black and white e-commerce store with Paystack integration and admin panel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
